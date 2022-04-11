@@ -17,7 +17,7 @@ class OwnerController {
         const owner = {
           email: dbRes.rows[0].email,
           login: dbRes.rows[0].login,
-          nOfReservations: dbRes.rows[0].nOfReservations
+          nOfReservations: dbRes.rows[0].nOfReservations,
         }
 
         return res.status(200).send(owner);

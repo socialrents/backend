@@ -1,12 +1,12 @@
 const client = require('../services/database');
 
-class OwnerController {
+class ClientController {
 
   async signup(req, res) {
     const { email, login, password } = req.body;
 
     try {
-      const sql = `insert into owners values ('${email}', '${login}', md5('${password}'), 0)`;
+      const sql = `insert into clients values ('${email}', '${login}', md5('${password}'), 0)`;
 
       const dbRes = await client.query(sql);
       console.log(dbRes);
@@ -16,9 +16,8 @@ class OwnerController {
         return res.status(422).send('Usuário já cadastrado!');
       }
     }
-
     return res.status(200).send('ok');
   }
 }
 
-module.exports = new OwnerController();
+module.exports = new ClientController();

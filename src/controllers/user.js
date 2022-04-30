@@ -6,31 +6,29 @@ class UserController {
     const { login, password } = req.body;
   
     var user = null, sql, dbRes
-  
+    console.log(login, password);
     try {
-      sql = `select * from owners where login = '${login}' and password = md5('${password}')`;
+      sql = `select * from owners where login = '${login}' and password = '${password}'`;
 
       dbRes = await client.query(sql);
 
       if(dbRes.rowCount > 0) {
         
         user = {
-          email: dbRes.rows[0].email,
           login: dbRes.rows[0].login,
-          nOfReservations: dbRes.rows[0].nOfReservations,
+          password: dbRes.rows[0].password,
           type: 'owner'
         }
       } else {  
-        sql = `select * from clients where login = '${login}' and password = md5('${password}')`;
+        sql = `select * from clients where login = '${login}' and password = '${password}'`;
 
         dbRes = await client.query(sql);
         console.log(dbRes.rowCount);
         if(dbRes.rowCount > 0) {
           
           user = {
-            email: dbRes.rows[0].email,
             login: dbRes.rows[0].login,
-            nOfParties: dbRes.rows[0].nOfParties,
+            password: dbRes.rows[0].password,
             type: 'client'
           }
         }
@@ -38,7 +36,7 @@ class UserController {
       if(user === null) {
         return res.status(404).send('usuário não encontrado');
       } else {
-        return res.status(200).send(user);
+        return res.status(200).send({ user });
       }
     } catch (error) {
       console.log(error.message);

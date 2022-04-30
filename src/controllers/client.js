@@ -6,7 +6,7 @@ class ClientController {
     const { email, login, password } = req.body;
 
     try {
-      const sql = `insert into clients values ('${email}', '${login}', md5('${password}'), 0)`;
+      const sql = `insert into clients values ('${email}', '${login}', '${password}', 0)`;
 
       const dbRes = await client.query(sql);
       console.log(dbRes);

@@ -11,7 +11,7 @@ class PartyController {
 					values ('${startDate}', '${endDate}', ${nOfDays}, ${nOfPeople}, '${city}', ${clientKey}, '${description}') `;
 				
 			const dbRes = await client.query(sql);
-			console.log(dbRes);
+			// console.log(dbRes);
 			return res.status(200).send('ok');
 		} catch(error) {
 			console.log(error.message);
@@ -25,7 +25,7 @@ class PartyController {
 			var sql = `select * from parties where client = ${clientKey}`;
 
 			const dbRes = await client.query(sql);
-			console.log(dbRes);
+			// console.log(dbRes);
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
 			console.log(error.message);

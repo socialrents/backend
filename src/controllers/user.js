@@ -6,7 +6,7 @@ class UserController {
     const { login, password } = req.body;
   
     var user = null, sql, dbRes
-    console.log(login, password);
+        console.log(login, password);
     try {
       sql = `select * from owners where login = '${login}' and password = '${password}'`;
 
@@ -15,6 +15,7 @@ class UserController {
       if(dbRes.rowCount > 0) {
         
         user = {
+          id: dbRes.rows[0].id,
           login: dbRes.rows[0].login,
           password: dbRes.rows[0].password,
           type: 'owner'
@@ -27,12 +28,14 @@ class UserController {
         if(dbRes.rowCount > 0) {
           
           user = {
+            id: dbRes.rows[0].id,
             login: dbRes.rows[0].login,
             password: dbRes.rows[0].password,
             type: 'client'
           }
         }
       }
+      console.log(user);
       if(user === null) {
         return res.status(404).send('usuário não encontrado');
       } else {

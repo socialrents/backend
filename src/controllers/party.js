@@ -1,24 +1,35 @@
 const client = require('../services/database');
 
 class PartyController {
+
 	async create(req, res) {
-		const { startDate, endDate, nOfDays, nOfPeople, description } = req.body;
-		var sql;
+		const { startDate, endDate, nOfDays, nOfPeople, city, description, clientKey } = req.body;
 		
 		try {
-			sql = `insert into parties (startdate, enddate, nofdays, nofpeople, description)
-					values ('${startDate}', '${endDate}', ${nOfDays}, ${nOfPeople}, '${description}') `;
-			
+			var sql = `insert into parties (startdate, enddate, nofdays, nofpeople, city, client, description)
+					values ('${startDate}', '${endDate}', ${nOfDays}, ${nOfPeople}, '${city}', ${clientKey}, '${description}') `;
+				
 			const dbRes = await client.query(sql);
 			console.log(dbRes);
+			return res.status(200).send('ok');
 		} catch(error) {
-			if(error) {
-				console.log(error.message);
-				return res.status(500).send('Erro no servidor');
-			}
+			console.log(error.message);
+			return res.status(500).send('Erro no servidor');
 		}
-		
-		return res.status(200).send('ok');
+	}
+	async getAll(req, res) {
+		const clientKey = req.params.clientID;
+
+		try {
+			var sql = `select * from parties where client = ${clientKey}`;
+
+			const dbRes = await client.query(sql);
+			console.log(dbRes);
+			return res.status(200).send(dbRes.rows);
+		} catch (error) {
+			console.log(error.message);
+			return res.status(500).send('Erro no servidor');
+		}
 	}
 }
 

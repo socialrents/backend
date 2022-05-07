@@ -4,6 +4,8 @@ const placeController = require('../controllers/place');
 const router = express.Router();
 
 router.post('/newPlace', placeController.create);
-router.get('/allPlaces/:city', placeController.getAll);
+router.get('/places/:ownerid', placeController.getAll)
+router.get('/allPlaces/:city', placeController.getAllByCity);
+router.delete('/deletePlace/:id', placeController.deletePlace);
 
 module.exports = router;

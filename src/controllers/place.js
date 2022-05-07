@@ -16,21 +16,20 @@ class PlaceController {
 			return res.status(500).send('Erro no servidor');
 		}
 	}
-	async getAllByCity(req, res) {
-		const city = req.params.city;
+	async getAll(req, res) {
 
 		try {
-			var sql = `select * from houses where city = '${city}'`;
+			var sql = `select * from houses`;
 
 			const dbRes = await client.query(sql);
-			// console.log(dbRes.rows);
+			console.log(dbRes.rows);
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
 			console.log(error.message);
 			return res.status(500).send('Erro no servidor');
 		}
 	}
-	async getAll(req, res) {
+	async getAllByOwner(req, res) {
 		const ownerid = req.params.ownerid;
 		try {
 			var sql = `select * from houses where owner = ${ownerid}`;

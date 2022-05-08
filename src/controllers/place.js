@@ -6,7 +6,7 @@ class PlaceController {
 		console.log(description, sqrmeters, city, district, owner, price)
 		try {
 			var sql = `insert into houses (description, sqrmeters, city, district, owner, price, reserved) 
-					   values ('${description}', '${sqrmeters}', '${city}', '${district}', '${owner}', '${price}', False)`;
+					   values ('${description}', '${sqrmeters}', '${city.name}', '${district.name}', '${owner}', '${price}', False)`;
 			
 			const dbRes = await client.query(sql);
 			// console.log(dbRes);
@@ -18,8 +18,11 @@ class PlaceController {
 	}
 	async getAll(req, res) {
 
+		console.log(req.params.city);
+		const city = req.params.city
+
 		try {
-			var sql = `select * from houses`;
+			var sql = `select * from houses where city = '${city}'`;
 
 			const dbRes = await client.query(sql);
 			console.log(dbRes.rows);

@@ -14,12 +14,14 @@ const clientRouter = require('./routers/client');
 const userRouter = require('./routers/user');
 const partyRouter = require('./routers/party');
 const placeRouter = require('./routers/place');
+const locationRouter = require('./routers/location');
 
 app.use('/api', ownerRouter);
 app.use('/api', clientRouter);
 app.use('/api', userRouter);
 app.use('/api', partyRouter);
 app.use('/api', placeRouter);
+app.use('/api', locationRouter);
 
 app.listen(3000, function () {
   console.log('servidor rodando no endereço: https://localhost:3000');

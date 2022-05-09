@@ -22,7 +22,17 @@ class PartyController {
 		const clientKey = req.params.clientID;
 
 		try {
-			var sql = `select * from parties where client = ${clientKey}`;
+
+			var sql = `select pr.*, h.district from houses as h
+						inner join
+						(
+							select p.*, r.* from parties as p
+							inner join
+							(
+								select fk_party, fk_house, total from reservations) as r
+								on r.fk_party = p.id
+						) as pr on pr.fk_house = h.id
+						where pr.client = ${clientKey}`
 
 			const dbRes = await client.query(sql);
 			// console.log(dbRes);
@@ -36,9 +46,25 @@ class PartyController {
 		const id = req.params.id
 
 		try {
-			var sql = `delete from parties where id = ${id}`;
-			const dbRes = await client.query(sql);
+			var sql = `delete from reservations where fk_party = ${id}` 
+			await client.query(sql);
+			sql = `delete from parties where id = ${id}`;
+			await client.query(sql);
+
 			return res.status(200).send('ok');
+		} catch (error) {
+			return res.status(500).send('Erro no servidor');
+		}
+	}
+	async getLastId(req, res) {
+		try {
+			var sql = 'select MAX(id) as id_party from parties'
+
+			const dbRes = await client.query(sql);
+			const partyId = dbRes.rows[0].id_party;
+			console.log('id party: ' + partyId);
+
+			return res.status(200).send({ partyId });
 		} catch (error) {
 			return res.status(500).send('Erro no servidor');
 		}

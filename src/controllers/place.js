@@ -64,7 +64,7 @@ class PlaceController {
 		try {
 			var sql = `
 				select h.id, h.description, h.sqrmeters, h.city, 
-					   h.district, o.login as owner, h.price, h.reserved from houses as h
+					   h.district, o.login as owner, o.id as ownerId, h.price, h.reserved from houses as h
 				inner join
 				(select id, login from owners) as o on o.id = h.owner
 				where h.district = '${district}'`;

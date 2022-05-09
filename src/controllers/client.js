@@ -19,6 +19,18 @@ class ClientController {
       console.log(error);
     }
   }
+  async createReservation(req, res) {
+    const { id_party, id_house, total } = req.body;
+    console.log(id_party, id_house, total);
+    try {
+      const sql = `insert into reservations (fk_party, fk_house, total) values (${id_party}, ${id_house}, '${total}')`;
+      await client.query(sql);
+      return res.status(200).send('ok');
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).send('Erro');
+    }
+  }
 }
 
 module.exports = new ClientController();

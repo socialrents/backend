@@ -22,7 +22,12 @@ class PlaceController {
 		const city = req.params.city
 
 		try {
-			var sql = `select * from houses where city = '${city}'`;
+			var sql =  `
+					select h.id, h.description, h.sqrmeters, h.city, 
+						h.district, o.login as owner, o.id as id_owner, h.price, h.reserved from houses as h
+					inner join
+					(select id, login from owners) as o on o.id = h.owner
+					where h.city = '${city}' and h.reserved is false`;
 
 			const dbRes = await client.query(sql);
 			console.log(dbRes.rows);
@@ -52,6 +57,23 @@ class PlaceController {
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
 			return res.status(500).send('Erro no servidor')
+		}
+	}
+	async getAllFromDistrict(req, res) {
+		const { city, district } = req.params;
+		try {
+			var sql = `
+				select h.id, h.description, h.sqrmeters, h.city, 
+					   h.district, o.login as owner, h.price, h.reserved from houses as h
+				inner join
+				(select id, login from owners) as o on o.id = h.owner
+				where h.district = '${district}'`;
+
+			const dbRes = await client.query(sql);
+			console.log(dbRes.rows);
+			return res.status(200).send(dbRes.rows);
+		} catch (error) {
+			return res.status(500).send('Erro no servidor');
 		}
 	}
 }

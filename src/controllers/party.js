@@ -69,6 +69,30 @@ class PartyController {
 			return res.status(500).send('Erro no servidor');
 		}
 	}
+	async accept(req, res) {
+		const id_party = req.params.id_party;
+		try {
+			var sql = `update parties set status = 'confirmed' where id = ${id_party}`;
+
+			await client.query(sql);
+			return res.status(200).send('ok');
+		} catch (error) {
+			console.log(error.message);
+			return res.status(500).send('Erro');
+		}
+	}
+	async deny(req, res) {
+		const id_party = req.params.id_party;
+		try {
+			var sql = `update parties set status = 'denied' where id = ${id_party}`;
+
+			await client.query(sql);
+			return res.status(200).send('ok');
+		} catch (error) {
+			console.log(error.message);
+			return res.status(500).send('Erro');
+		}
+	}
 }
 
 module.exports = new PartyController();

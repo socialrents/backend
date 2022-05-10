@@ -7,5 +7,7 @@ router.post('/newParty', partyController.create);
 router.get('/parties/:clientID', partyController.getAll);
 router.get('/lastPartyId', partyController.getLastId);
 router.delete('/deleteParty/:id', partyController.deleteParty);
+router.put('/acceptParty/:id_party', partyController.accept);
+router.put('/denyParty/:id_party', partyController.deny);
 
 module.exports = router;

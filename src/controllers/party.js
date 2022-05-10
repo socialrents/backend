@@ -48,11 +48,14 @@ class PartyController {
 		try {
 			var sql = `delete from reservations where fk_party = ${id}` 
 			await client.query(sql);
+			sql = `delete from notifications where fk_party = ${id}`
+			await client.query(sql)
 			sql = `delete from parties where id = ${id}`;
 			await client.query(sql);
 
 			return res.status(200).send('ok');
 		} catch (error) {
+			console.log(error.message);
 			return res.status(500).send('Erro no servidor');
 		}
 	}

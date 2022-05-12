@@ -36,7 +36,19 @@ async function createAllTables() {
     city varchar(30) not null,
     client integer references clients (id)
   );
-  `);
+  create table reservations (
+    id serial primary key,
+    fk_party integer references parties(id),
+    fk_house integer references houses(id),
+    total money
+  );
+  create table notifications (
+    id serial primary key,
+    fk_house integer references houses(id),
+    fk_party integer references parties(id),
+    id_owner integer
+  );`);
+
   console.log('Ok.');
   
   await client.end()

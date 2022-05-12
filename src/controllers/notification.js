@@ -3,14 +3,15 @@ const client = require('../services/database');
 class NotificationController {
     async getAll(req, res) {
         const ownerid = req.params.ownerid
+        console.log(ownerid)
         try {
-           var sql = `select fk_house as id_house, fk_party as id_party, id_owner, pInfo.* from notifications
+           var sql = `select notifications2.id as id_notif, fk_house as id_house, fk_party as id_party, id_owner, pInfo.* from notifications2
                         inner join
                         (
                             select c.login, p.* from clients as c
                             inner join
                             (
-                                select id, startdate, enddate, nofpeople, description, client from parties
+                                select id, startdate, enddate, nofpeople, description, client from parties2
                             ) as p on c.id = client
                         ) as pInfo on fk_party = pInfo.id
                         
@@ -27,7 +28,7 @@ class NotificationController {
         const { id_house, id_party, id_owner } = req.body;
         
         try {
-            var sql = `insert into notifications (fk_house, fk_party, id_owner) values (
+            var sql = `insert into notifications2 (fk_house, fk_party, id_owner) values (
                 ${id_house}, ${id_party}, ${id_owner})`
                 
                 const dbRes = await client.query(sql);

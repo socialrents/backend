@@ -20,10 +20,11 @@ class ClientController {
     }
   }
   async createReservation(req, res) {
-    const { id_party, id_house, total } = req.body;
-    console.log(id_party, id_house, total);
+    const { id_party, id_house, id_owner, login_client, total } = req.body;
+    console.log(id_party, id_house, id_owner, login_client, total);
     try {
-      const sql = `insert into reservations (fk_party, fk_house, total) values (${id_party}, ${id_house}, '${total}')`;
+      const sql = `insert into reservations2 (fk_party, fk_house, id_owner, login_client, total) 
+                    values (${id_party}, ${id_house}, ${id_owner}, '${login_client}', '${total}')`;
       await client.query(sql);
       return res.status(200).send('ok');
     } catch (error) {

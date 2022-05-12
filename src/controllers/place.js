@@ -27,7 +27,7 @@ class PlaceController {
 						h.district, o.login as owner, o.id as id_owner, h.price, h.reserved from houses as h
 					inner join
 					(select id, login from owners) as o on o.id = h.owner
-					where h.city = '${city}' and h.reserved is false`;
+					where h.city = '${city}' and h.reserved is false order by h.price`;
 
 			const dbRes = await client.query(sql);
 			console.log(dbRes.rows);

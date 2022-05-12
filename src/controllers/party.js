@@ -7,7 +7,7 @@ class PartyController {
 		
 		console.log(req.body);
 		try {
-			var sql = `insert into parties (startdate, enddate, nofdays, nofpeople, city, client, description)
+			var sql = `insert into parties2 (startdate, enddate, nofdays, nofpeople, city, client, description)
 					values ('${startDate}', '${endDate}', ${nOfDays}, ${nOfPeople}, '${city}', ${clientKey}, '${description}') `;
 				
 			const dbRes = await client.query(sql);
@@ -26,10 +26,10 @@ class PartyController {
 			var sql = `select pr.*, h.district from houses as h
 						inner join
 						(
-							select p.*, r.* from parties as p
+							select p.*, r.* from parties2 as p
 							inner join
 							(
-								select fk_party, fk_house, total from reservations) as r
+								select fk_party, fk_house, total from reservations2) as r
 								on r.fk_party = p.id
 						) as pr on pr.fk_house = h.id
 						where pr.client = ${clientKey}`
@@ -46,11 +46,11 @@ class PartyController {
 		const id = req.params.id
 
 		try {
-			var sql = `delete from reservations where fk_party = ${id}` 
+			var sql = `delete from reservations2 where fk_party = ${id}` 
 			await client.query(sql);
-			sql = `delete from notifications where fk_party = ${id}`
+			sql = `delete from notifications2 where fk_party = ${id}`
 			await client.query(sql)
-			sql = `delete from parties where id = ${id}`;
+			sql = `delete from parties2 where id = ${id}`;
 			await client.query(sql);
 
 			return res.status(200).send('ok');
@@ -61,7 +61,7 @@ class PartyController {
 	}
 	async getLastId(req, res) {
 		try {
-			var sql = 'select MAX(id) as id_party from parties'
+			var sql = 'select MAX(id) as id_party from parties2'
 
 			const dbRes = await client.query(sql);
 			const partyId = dbRes.rows[0].id_party;
@@ -73,11 +73,12 @@ class PartyController {
 		}
 	}
 	async accept(req, res) {
-		const id_party = req.params.id_party;
+		const { id_notif, id_party, id_house } = req.params;
+		console.log( id_notif, id_party, id_house);
 		try {
-			var sql = `update parties set status = 'confirmed' where id = ${id_party}`;
-
-			await client.query(sql);
+			await client.query(`update parties2 set status = 'confirmed' where id = ${id_party}`);
+			await client.query(`update houses set reserved = true where id = ${id_house}`);
+			await client.query(`delete from notifications2 where id = ${id_notif}`);
 			return res.status(200).send('ok');
 		} catch (error) {
 			console.log(error.message);
@@ -85,11 +86,11 @@ class PartyController {
 		}
 	}
 	async deny(req, res) {
-		const id_party = req.params.id_party;
+		const { id_notif, id_party } = req.params;
+		console.log( id_notif, id_party);
 		try {
-			var sql = `update parties set status = 'denied' where id = ${id_party}`;
-
-			await client.query(sql);
+			await client.query(`update parties2 set status = 'denied' where id = ${id_party}`);
+			await client.query(`delete from notifications2 where id = ${id_notif}`);
 			return res.status(200).send('ok');
 		} catch (error) {
 			console.log(error.message);

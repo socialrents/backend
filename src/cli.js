@@ -27,27 +27,31 @@ async function createAllTables() {
     district varchar(30) not null,
     owner integer references owners (id)
   );
-  create table if not exists parties (
-    id serial not null primary key,
-    startDate date not null,
-    endDate date not null,
-    nOfDays integer,
-    nOfPeople integer,
-    city varchar(30) not null,
-    client integer references clients (id)
+  create table parties (
+    id serial primary key,
+    startdate date unique,
+    enddate date unique,
+    nofdays integer,
+    nofpeople integer,
+    city varchar(30),
+    client integer references clients(id),
+    description varchar(200),
+    status varchar(10)
   );
   create table reservations (
     id serial primary key,
-    fk_party integer references parties(id),
-    fk_house integer references houses(id),
-    total money
-  );
-  create table notifications (
-    id serial primary key,
-    fk_house integer references houses(id),
-    fk_party integer references parties(id),
-    id_owner integer
-  );`);
+      fk_party integer references parties2(id),
+      fk_house integer references houses(id),
+      id_owner integer,
+      login_client varchar(20),
+      total money
+    );
+    create table notifications (
+      id serial primary key,
+      fk_house integer references houses(id),
+      fk_party integer references parties2(id),
+      id_owner integer
+    );`);
 
   console.log('Ok.');
   

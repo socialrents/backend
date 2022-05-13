@@ -16,6 +16,7 @@ class UserController {
         
         user = {
           id: dbRes.rows[0].id,
+          email: dbRes.rows[0].email,
           login: dbRes.rows[0].login,
           password: dbRes.rows[0].password,
           type: 'owner'
@@ -29,6 +30,7 @@ class UserController {
           
           user = {
             id: dbRes.rows[0].id,
+            email: dbRes.rows[0].email,
             login: dbRes.rows[0].login,
             password: dbRes.rows[0].password,
             type: 'client'
@@ -43,6 +45,22 @@ class UserController {
       }
     } catch (error) {
       console.log(error.message);
+    }
+  }
+  async updateProfile(req, res) {
+    const { id, email, login, type } = req.body;
+    console.log(id, email, login, type)
+    try {
+      if(type === 'owner') {
+        await client.query(`update owners set email = '${email}', login = '${login}' where id = ${id}`);
+      } else if(type === 'client') {
+        await client.query(`update clients set email = '${email}', login = '${login}' where id = ${id}`);
+      }
+
+      return res.status(200).send('ok');
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).send('erro');
     }
   }
 }

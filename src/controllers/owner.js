@@ -24,7 +24,7 @@ class OwnerController {
     const id = req.params.ownerId;
     console.log(id);
     try {
-      var sql = `select fk_house, login_client, p.startdate, p.enddate, p.nofpeople, p.description, total 
+      var sql = `select fk_house as id_house, login_client as client, p.startdate, p.enddate, p.nofpeople, p.description, total 
                 from reservations2, parties2 p where id_owner = ${id} and p.id = fk_party`;
       
       const dbRes = await client.query(sql);

@@ -63,6 +63,22 @@ class UserController {
       return res.status(500).send('erro');
     }
   }
+  async updateProfileAndPass(req, res) {
+    const { id, email, login, type, password } = req.body;
+    console.log(id, email, login, type, password)
+    try {
+      if(type === 'owner') {
+        await client.query(`update owners set email = '${email}', login = '${login}', password = '${password}' where id = ${id}`);
+      } else if(type === 'client') {
+        await client.query(`update clients set email = '${email}', login = '${login}', password = '${password}' where id = ${id}`);
+      }
+
+      return res.status(200).send('ok');
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).send('erro');
+    }
+  }
 }
 
 module.exports = new UserController();

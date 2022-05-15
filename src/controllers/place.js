@@ -40,7 +40,7 @@ class PlaceController {
 	async getAllByOwner(req, res) {
 		const ownerid = req.params.ownerid;
 		try {
-			var sql = `select * from houses where owner = ${ownerid}`;
+			var sql = `select * from houses where owner = ${ownerid} order by id DESC`;
 			const dbRes = await client.query(sql);
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
@@ -74,6 +74,19 @@ class PlaceController {
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
 			return res.status(500).send('Erro no servidor');
+		}
+	}
+	async edit(req, res) {
+		const { id, description, price, sqrmeters } = req.body;
+		console.log(id, description, price, sqrmeters)
+		try {
+			var sql = `update houses set description = '${description}', price = '${price}', sqrmeters = '${sqrmeters}' where id = ${id}`;
+			
+			await client.query(sql);
+			return res.status(200).send('ok');
+		} catch (error) {
+			console.log(error.message);
+			return res.status(500).send('erro');
 		}
 	}
 }

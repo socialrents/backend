@@ -14,10 +14,10 @@ class OwnerController {
 
       return res.status(200).send('ok');
     } catch (error) {
+      console.log(error.message);
       if (error.code === '23505') {
         return res.status(422).send('Usuário já cadastrado!');
       }
-      console.log(error);
     }
   }
   async getReservations(req, res) {

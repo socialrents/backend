@@ -73,11 +73,13 @@ class PartyController {
 		}
 	}
 	async accept(req, res) {
-		const { id_notif, id_party, id_house } = req.params;
-		console.log( id_notif, id_party, id_house);
+		const { id_notif, id_party, id_house, login, id_owner } = req.body;
+		console.log( req.body);
 		try {
 			await client.query(`update parties2 set status = 'confirmed' where id = ${id_party}`);
 			await client.query(`update houses set reserved = true where id = ${id_house}`);
+			await client.query(`insert into reservations2 (fk_party, fk_house, id_owner, login_client) 
+			values (${id_party}, ${id_house}, ${id_owner}, '${login}')`)
 			await client.query(`delete from notifications2 where id = ${id_notif}`);
 			return res.status(200).send('ok');
 		} catch (error) {

@@ -49,13 +49,14 @@ class PlaceController {
 	}
 	async deletePlace(req, res) {
 		const id = req.params.id;
-
+		console.log(id);
 		try {
 			var sql = `delete from houses where id = ${id}`;
 
 			const dbRes = await client.query(sql);
 			return res.status(200).send(dbRes.rows);
 		} catch (error) {
+			console.log(error.message);
 			return res.status(500).send('Erro no servidor')
 		}
 	}

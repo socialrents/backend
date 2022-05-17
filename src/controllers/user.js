@@ -60,6 +60,9 @@ class UserController {
       return res.status(200).send('ok');
     } catch (error) {
       console.log(error.message);
+      if (error.code === '23505') {
+        return res.status(422).send('Usuário já cadastrado!');
+      }
       return res.status(500).send('erro');
     }
   }
